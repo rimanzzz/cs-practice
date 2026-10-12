@@ -18,6 +18,8 @@ def parse_record(line: str) -> dict:
             f"температура должна быть числом: {temp_text!r}"
         ) from exc
 
+    return {"city": city, "temperature": temperature, "date": date}
+
 
 def read_valid(lines: list[str]) -> list[dict]:
     records = []
