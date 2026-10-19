@@ -3,6 +3,7 @@ from typing import Iterable
 
 
 def parse_event(line: str) -> dict:
+
     parts = line.strip().split(maxsplit=2)
     if len(parts) != 3:
         raise ValueError("Ожидались время, уровень и сообщение")
@@ -10,6 +11,10 @@ def parse_event(line: str) -> dict:
     timestamp, level, message = parts
     if not timestamp or not level or not message:
         raise ValueError("Пустое поле в записи журнала")
+
+    valid_levels = {"DEBUG", "INFO", "WARNING", "ERROR"}
+    if level not in valid_levels:
+        raise ValueError(f"Неизвестный уровень: {level}")
 
     return {"time": timestamp, "level": level, "message": message}
 

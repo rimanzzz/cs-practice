@@ -1,5 +1,3 @@
-"""Точка входа для обработки журнала."""
-
 import sys
 from pathlib import Path
 
@@ -7,8 +5,6 @@ from logstats import count_levels, format_report, parse_event, top_errors
 
 
 def main() -> int:
-    # В проверяющей системе имя файла передаётся через стандартный ввод.
-    # Аргумент командной строки тоже поддерживается для удобного локального запуска.
     if len(sys.argv) > 1:
         filename = sys.argv[1].strip()
     else:
@@ -25,7 +21,6 @@ def main() -> int:
     broken_count = 0
 
     try:
-        # Первый проход: считаем строки и уровни, не загружая файл целиком.
         with log_path.open("r", encoding="utf-8") as log:
             for line in log:
                 total += 1
@@ -41,7 +36,6 @@ def main() -> int:
                     counts["BROKEN"] = counts.get("BROKEN", 0) + 1
                     broken_count += 1
 
-        # Второй проход: находим три самых частых сообщения ERROR.
         with log_path.open("r", encoding="utf-8") as log:
             errors = top_errors(log, 3)
 
