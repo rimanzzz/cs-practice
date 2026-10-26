@@ -35,7 +35,7 @@ def deepest_path(paths):
 
 def human_size(n_bytes):
     index = 0
-    B = ["Б", "KБ", "МБ", "ГБ", "ТБ"]
+    B = ["Б", "КБ", "МБ", "ГБ", "ТБ"]
     while n_bytes >= 1024:
         n_bytes /= 1024
         index += 1
