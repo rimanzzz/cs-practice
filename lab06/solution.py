@@ -11,3 +11,16 @@ def count_by_extension(paths):
         else:
             counts[extension] = 1
     return counts
+
+
+def deepest_path(paths):
+    best_path = ''
+    max_path = -1
+    for path in paths:
+        count_path = path.count('/')
+        if count_path > max_path:
+            max_path = count_path
+            best_path = path
+        if count_path == max_path and path < best_path:
+            best_path = path
+    return best_path
