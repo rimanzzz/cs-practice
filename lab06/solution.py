@@ -24,3 +24,12 @@ def deepest_path(paths):
         if count_path == max_path and path < best_path:
             best_path = path
     return best_path
+
+
+def human_size(n_bytes):
+    index = 0
+    B = ["B", "KB", "MB", "GB", "TB"]
+    while n_bytes >= 1024:
+        n_bytes /= 1024
+        index += 1
+    return f'{n_bytes:.1f}' + ' ' + B[index]
