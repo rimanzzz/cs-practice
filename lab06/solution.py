@@ -1,12 +1,13 @@
-def count_by_extension(paths: list[str]) -> dict[str, int]:
+
+def count_by_extension(paths):
     counts = {}
 
     for path in paths:
-        filename = path.rsplit("/", 1)[-1]
-        dot_position = filename.rfind(".")
+        filename = path.rsplit('/', 1)[-1]
+        dot_position = filename.rfind('.')
 
-        if dot_position == -1:
-            extension = ""
+        if dot_position <= 0:
+            extension = ''
         else:
             extension = filename[dot_position + 1:].lower()
 
@@ -38,4 +39,6 @@ def human_size(n_bytes):
     while n_bytes >= 1024:
         n_bytes /= 1024
         index += 1
-    return f'{n_bytes:.1f}' + ' ' + B[index]
+    if index == 0:
+        return f'{int(n_bytes)} {B[index]}'
+    return f'{n_bytes:.1f} {B[index]}'
