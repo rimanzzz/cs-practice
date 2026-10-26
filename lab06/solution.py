@@ -1,16 +1,22 @@
-def count_by_extension(paths):
+def count_by_extension(paths: list[str]) -> dict[str, int]:
     counts = {}
+
     for path in paths:
-        dot_position = path.rfind('.')
+        filename = path.rsplit("/", 1)[-1]
+        dot_position = filename.rfind(".")
+
         if dot_position == -1:
-            extension = ''
+            extension = ""
         else:
-            extension = path[dot_position + 1:].lower()
+            extension = filename[dot_position + 1:].lower()
+
         if extension in counts:
             counts[extension] += 1
         else:
             counts[extension] = 1
+
     return counts
+
 
 
 def deepest_path(paths):
@@ -28,7 +34,7 @@ def deepest_path(paths):
 
 def human_size(n_bytes):
     index = 0
-    B = ["B", "KB", "MB", "GB", "TB"]
+    B = ["Б", "KБ", "МБ", "ГБ", "ТБ"]
     while n_bytes >= 1024:
         n_bytes /= 1024
         index += 1
