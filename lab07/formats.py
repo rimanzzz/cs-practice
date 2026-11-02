@@ -26,33 +26,37 @@ def parse_settings(lines):
             settings[current_list].append(line[2:].strip())
             continue
 
-        if ":" not in line:
+        if "#" in line:
+            line = line.split("#", 1)[0].strip()
+
+        if not line or ":" not in line:
             continue
 
         key, value = line.split(":", 1)
         key = key.strip()
-        value = value.split("#", 1)[0].strip()
+        value = value.strip()
 
         if not value:
             settings[key] = []
             current_list = key
+            continue
+
+        current_list = None
+
+        if value in ("true", "yes"):
+            value = True
+        elif value in ("false", "no"):
+            value = False
         else:
-            current_list = None
-
-            if value.lower() in ("true", "yes"):
-                value = True
-            elif value.lower() in ("false", "no"):
-                value = False
-            else:
+            try:
+                value = int(value)
+            except ValueError:
                 try:
-                    value = int(value)
+                    value = float(value)
                 except ValueError:
-                    try:
-                        value = float(value.replace(",", "."))
-                    except ValueError:
-                        pass
+                    pass
 
-            settings[key] = value
+        settings[key] = value
 
     return settings
 
