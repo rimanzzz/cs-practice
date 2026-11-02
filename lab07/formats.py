@@ -39,8 +39,10 @@ def parse_settings(lines):
         else:
             current_list = None
 
-            if value in ("true", "false"):
-                value = value == "true"
+            if value.lower() in ("true", "yes"):
+                value = True
+            elif value.lower() in ("false", "no"):
+                value = False
             else:
                 try:
                     value = int(value)
@@ -53,8 +55,6 @@ def parse_settings(lines):
             settings[key] = value
 
     return settings
-print(parse_settings(["active: True"]))
-
 
 def merge_by_key(rows, extra, key="id"):
     result = []
