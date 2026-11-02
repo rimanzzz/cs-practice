@@ -22,14 +22,21 @@ def parse_settings(lines):
         if not line or line.startswith("#"):
             continue
 
-        if line.startswith("- ") and current_list is not None:
-            settings[current_list].append(line[2:].strip())
+        # Убираем комментарий
+        line = line.split("#", 1)[0].strip()
+
+        if not line:
             continue
 
-        if "#" in line:
-            line = line.split("#", 1)[0].strip()
+        # Элемент списка
+        if line.startswith("- "):
+            if current_list is not None:
+                settings[current_list].append(line[2:].strip())
+            continue
 
-        if not line or ":" not in line:
+        # Пара ключ: значение
+        if ":" not in line:
+            current_list = None
             continue
 
         key, value = line.split(":", 1)
@@ -59,6 +66,13 @@ def parse_settings(lines):
         settings[key] = value
 
     return settings
+print(parse_settings([
+    "a: +12",
+    "b: -3.5",
+    "c: 0",
+    "d: yes",
+    "e: no"
+]))
 
 def merge_by_key(rows, extra, key="id"):
     result = []
@@ -67,7 +81,7 @@ def merge_by_key(rows, extra, key="id"):
         row_key = str(row.get(key, ""))
         extra_row = extra.get(row_key, {})
 
-        merged = row | extra_row
+        merged = extra_row | row
         result.append(merged)
 
     return result
