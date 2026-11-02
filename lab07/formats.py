@@ -43,6 +43,11 @@ def parse_settings(lines):
                 value = int(value)
             elif value in ("true", "false"):
                 value = value == "true"
+            else:
+                try:
+                    value = float(value.replace(",", "."))
+                except ValueError:
+                    pass
 
             settings[key] = value
 
