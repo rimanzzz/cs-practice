@@ -1,3 +1,6 @@
+import json
+
+
 def csv_to_records(text):
     res = text.split('\n')
     res1 = res[0].split(',')
@@ -7,6 +10,7 @@ def csv_to_records(text):
         s = s.split(',')
         records.append(dict(zip(res1, s)))
     return records
+
 
 def parse_settings(lines):
     settings = {}
@@ -25,6 +29,7 @@ def parse_settings(lines):
         settings[key] = value
     return settings
 
+
 def merge_by_key(rows, extra, key):
     result = []
     for row in rows:
@@ -32,4 +37,9 @@ def merge_by_key(rows, extra, key):
             if row[key] == item[key]:
                 merged = row | item
                 result.append(merged)
+    return result
+
+
+def records_to_json(records):
+    result = json.dumps(records, ensure_ascii=False)
     return result
