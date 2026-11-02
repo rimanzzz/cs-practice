@@ -12,28 +12,19 @@ def csv_to_records(text):
     return records
 
 
+
 def parse_settings(lines):
     settings = {}
     current_list = None
 
     for line in lines:
-        line = line.strip()
-
-        if not line or line.startswith("#"):
-            continue
-
         line = line.split("#", 1)[0].strip()
 
         if not line:
             continue
 
         if line.startswith("- "):
-            if current_list is not None:
-                settings[current_list].append(line[2:].strip())
-            continue
-
-        if ":" not in line:
-            current_list = None
+            settings[current_list].append(line[2:])
             continue
 
         key, value = line.split(":", 1)
@@ -43,26 +34,26 @@ def parse_settings(lines):
         if not value:
             settings[key] = []
             current_list = key
-            continue
-
-        current_list = None
-
-        if value in ("true", "yes"):
-            value = True
-        elif value in ("false", "no"):
-            value = False
         else:
-            try:
-                value = int(value)
-            except ValueError:
-                try:
-                    value = float(value)
-                except ValueError:
-                    pass
+            current_list = None
 
-        settings[key] = value
+            if value in ("true", "yes"):
+                value = True
+            elif value in ("false", "no"):
+                value = False
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        pass
+
+            settings[key] = value
 
     return settings
+
 
 def merge_by_key(rows, extra, key="id"):
     result = []
