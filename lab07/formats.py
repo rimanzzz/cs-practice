@@ -67,7 +67,7 @@ def merge_by_key(rows, extra, key="id"):
         row_key = str(row.get(key, ""))
         extra_row = extra.get(row_key, {})
 
-        merged = extra_row | row
+        merged = row | extra_row
         result.append(merged)
 
     return result
