@@ -57,10 +57,9 @@ def parse_settings(lines):
 def merge_by_key(rows, extra, key):
     result = []
     for row in rows:
-        extra_row = extra.get(str(row[key]))
-        if extra_row is not None:
-            merged = row | extra_row
-            result.append(merged)
+        extra_row = extra.get(str(row[key]), {})
+        merged = row | extra_row
+        result.append(merged)
     return result
 
 
