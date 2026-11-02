@@ -2,44 +2,73 @@ import json
 
 
 def csv_to_records(text):
-    res = text.split('\n')
-    res1 = res[0].split(',')
+    res = text.strip().split('\n')
+    res1 = [x.strip() for x in res[0].split(',')]
     records = []
 
     for s in res[1:]:
-        s = s.split(',')
+        s = [x.strip() for x in s.split(',')]
         records.append(dict(zip(res1, s)))
     return records
 
 
 def parse_settings(lines):
     settings = {}
-    for v in lines:
-        v = v.split(':')
-        key = v[0].strip()
-        value = v[1].strip()
-        if value.isdigit():
-            value = int(value)
-        elif '.' in value:
-            value = float(value)
-        elif value == 'true':
-            value = True
-        elif value == 'false':
-            value = False
-        settings[key] = value
+    current_list = None
+
+    for line in lines:
+        line = line.strip()
+
+        if not line or line.startswith("#"):
+            continue
+
+        if line.startswith("- ") and current_list is not None:
+            settings[current_list].append(line[2:].strip())
+            continue
+
+        if ":" not in line:
+            continue
+
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.split("#", 1)[0].strip()
+
+        if not value:
+            settings[key] = []
+            current_list = key
+        else:
+            current_list = None
+            if value.isdigit():
+                value = int(value)
+            elif value in ("true", "false"):
+                value = (value == "true")
+            else:
+                try:
+                    if "." in value:
+                        value = float(value)
+                except ValueError:
+                    pass
+
+            settings[key] = value
+
     return settings
 
 
 def merge_by_key(rows, extra, key):
     result = []
     for row in rows:
-        for item in extra:
-            if row[key] == item[key]:
-                merged = row | item
-                result.append(merged)
+        extra_row = extra.get(str(row[key]))
+        if extra_row is not None:
+            merged = row | extra_row
+            result.append(merged)
     return result
 
 
 def records_to_json(records):
-    result = json.dumps(records, ensure_ascii=False)
+    result = json.dumps(
+        records,
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=True
+    )
     return result
