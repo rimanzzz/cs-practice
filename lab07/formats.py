@@ -24,3 +24,12 @@ def parse_settings(lines):
             value = False
         settings[key] = value
     return settings
+
+def merge_by_key(rows, extra, key):
+    result = []
+    for row in rows:
+        for item in extra:
+            if row[key] == item[key]:
+                merged = row | item
+                result.append(merged)
+    return result
