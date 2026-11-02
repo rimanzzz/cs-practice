@@ -38,28 +38,27 @@ def parse_settings(lines):
             current_list = key
         else:
             current_list = None
+
             if value.isdigit():
                 value = int(value)
             elif value in ("true", "false"):
-                value = (value == "true")
-            else:
-                try:
-                    if "." in value:
-                        value = float(value)
-                except ValueError:
-                    pass
+                value = value == "true"
 
             settings[key] = value
 
     return settings
 
 
-def merge_by_key(rows, extra, key):
+def merge_by_key(rows, extra, key="id"):
     result = []
+
     for row in rows:
-        extra_row = extra.get(str(row[key]), {})
-        merged = row | extra_row
+        row_key = str(row.get(key, ""))
+        extra_row = extra.get(row_key, {})
+
+        merged = extra_row | row
         result.append(merged)
+
     return result
 
 
