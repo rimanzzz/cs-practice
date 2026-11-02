@@ -39,19 +39,21 @@ def parse_settings(lines):
         else:
             current_list = None
 
-            if value.isdigit():
-                value = int(value)
-            elif value in ("true", "false"):
+            if value in ("true", "false"):
                 value = value == "true"
             else:
                 try:
-                    value = float(value.replace(",", "."))
+                    value = int(value)
                 except ValueError:
-                    pass
+                    try:
+                        value = float(value.replace(",", "."))
+                    except ValueError:
+                        pass
 
             settings[key] = value
 
     return settings
+print(parse_settings(["active: True"]))
 
 
 def merge_by_key(rows, extra, key="id"):
