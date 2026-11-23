@@ -2,7 +2,7 @@ import numpy as np
 
 def make_hours():
     hours = np.arange(0, 24, 3)
-    return hours
+    return hours.tolist()
 
 def vector_report(values):
     arr = np.array(values, dtype=float)
